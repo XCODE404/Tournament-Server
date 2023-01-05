@@ -1,88 +1,44 @@
-exports.create = ({ response, message, data = [] }) => {
-  response.send({
-    message: message ? message : "Data creation process was successful!",
-    status: 201,
-    success: true,
-    results: data
-  });
-}
+//*[START] RESPONSE API *****************************
+//*Description:
+//*Success and Error response for controller
+//*
 
-exports.retrive = ({
-  response,
-  status,
-  message,
-  data,
-  count = 0,
-  success = true,
-}) => {
-  response.send({
-    message: message ? message : "Data retrive process was successful!",
-    status: status ? status : 200,
-    success: success,
-    results: data,
-    count: count
-  });
-}
+//************************************
+//*Function Name: success
+//*Inputs & Arguments: message, results, statusCode
+//*Type: string, object | array, number
+//************************************
+exports.success = ({ message, results, statusCode }) => {
+	return {
+		message,
+		error: false,
+		code: statusCode,
+		results
+	};
+};
 
-exports.update = ({
-  response,
-  message,
-  success = true,
-  data = []
-}) => {
-  response.send({
-    message: message ? message : "Data update process was successful!",
-    status: 200,
-    success: success,
-    results: data
-  });
-}
+//************************************
+//*Function Name: error
+//*Inputs & Arguments: message, statusCode
+//*Type: string, number
+//************************************
+exports.error = ({ message, statusCode }) => {
+	// List of common HTTP request code
+	const codes = [200, 201, 400, 401, 404, 403, 422, 500];
 
-exports.delete = ({
-  response,
-  message,
-  success = true
-}) => {
-  response.send({
-    message: message ? message : "Data dalete process was successful!",
-    status: 200,
-    success: success,
-  });
-}
+	// Get matched code
+	const findCode = codes.find((code) => code == statusCode);
 
-exports.error = ({
-  response,
-  status,
-  message
-}) => {
-  response.status(status).send({
-    status: status,
-    success: false,
-    message: message ? message : "Internal Server Error!",
-  });
-}
+	if (!findCode) statusCode = 500;
+	else statusCode = findCode;
 
-exports.signIn = ({ response, token }) => {
-  response.send({
-    message: "SignIn process was successful!",
-    status: 200,
-    token: token,
-    success: true,
-  });
-}
+	return {
+		message,
+		code: statusCode,
+		error: true
+	};
+};
 
-exports.signUp = ({ response }) => {
-  response.send({
-    message: "SignUp process was successful!",
-    status: 200,
-    success: true,
-  });
-}
-
-exports.signout = ({ response }) => {
-  response.send({
-    message: "SignOu process was successful!",
-    status: 200,
-    success: true,
-  });
-}
+//*Notes:
+//*Not applicable
+//*[END] RESPONSE API *****************************
