@@ -35,6 +35,9 @@ app.use(helmet());
 // adding morgan to log HTTP requests
 app.use(morgan('combined'));
 
+// routes
+app.use('/api/tournament', require('./app/routes/tournament.routes'));
+
 app.listen(port, () => {
     console.log(`Server is running on port ${port}.`);
 });
